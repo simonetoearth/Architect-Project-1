@@ -24,7 +24,7 @@ public class ToDoList extends Application {
     }
 
     @Override
-    public void start(Stage stage){
+    public void start(Stage stage) {
         stage.setTitle("To Do List");
         //Setting the button to say "Add"
         button = new Button();
@@ -40,23 +40,28 @@ public class ToDoList extends Application {
 
         //Making a textfield so whenever ObservableList<String> ToDoList is updated it is reflected
         TextField inputField = new TextField();
-        button.setOnAction(e -> {
+        // Create Add button
+        Button addButton = new Button("Add");
+        addButton.setOnAction(e -> {
             ToDoList.add(inputField.getText());
-            inputField.setText("");
-            inputField.requestFocus();
+            inputField.clear();
         });
 
+        // Create Delete button
+        Button deleteButton = new Button("Delete");
+        deleteButton.setOnAction(e -> {
+            int selectedIndex = listView.getSelectionModel().getSelectedIndex();
+            if (selectedIndex >= 0) {
+                ToDoList.remove(selectedIndex);
+            }
+        });
 
-        //creating our HBox
-        HBox entryBox = new HBox();
-        entryBox.getChildren().addAll(inputField, button);
+        // Layout setup
+        HBox entryBox = new HBox(10, inputField, addButton, deleteButton);
+        VBox vBox = new VBox(10, listView, entryBox);
 
-        //Creating vBox
-        VBox vBox = new VBox();
-        vBox.getChildren().addAll(listView, entryBox);
-
-        //Shows our scene
-        Scene scene = new Scene(vBox);
+        // Scene setup
+        Scene scene = new Scene(vBox, 300, 300);
         stage.setScene(scene);
         stage.show();
     }
